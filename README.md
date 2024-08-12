@@ -22,17 +22,9 @@ backends:
 
 Regular **Markdown** here.
 
-<div hidden>
+The following code-block will be rendered as a Mermaid diagram:
+
+```mermaid
+flowchart LR
+  A --> B
 ```
-@startuml firstDiagram
-
-Alice -> Bob: Hello
-Bob -> Alice: Hi!
-		
-@enduml
-```
-</div>
-
-![](firstDiagram.svg)
-
-Some more markdown.
