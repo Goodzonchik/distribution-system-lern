@@ -27,52 +27,33 @@ USE merminds as build-in C4-documentation
 The following code-block will be rendered as a Mermaid diagram:
 
 ```mermaid
-
 C4Context
 
-title Test web servers system
+title Distribution system lern
 
-Enterprise_Boundary(b0, "BankBoundary0") {
-        Person(customerA, "Banking Customer A", "A customer of the bank, with personal bank accounts.")
-        Person(customerB, "Banking Customer B")
-        Person_Ext(customerC, "Banking Customer C", "desc")
+Person_Ext(UnauthPerson, "UnAuthPerson", "Person without auth")
+Person(AuthPerson, "AuthPerson", "Person with auth")
 
-        Person(customerD, "Banking Customer D", "A customer of the bank, <br/> with personal bank accounts.")
+System_Ext(CDN, "CDN for apps static <br> (s3 backet wih static)")
 
-        System(SystemAA, "Internet Banking System", "Allows customers to view information about their bank accounts, and make payments.")
+Rel(UnauthPerson, CDN, "Get app static")
+Rel(AuthPerson, CDN, "Get app static")
+Rel(UnauthPerson, api_gateway, "open app")
+Rel(AuthPerson, api_gateway, "auth")
 
-        Enterprise_Boundary(b1, "BankBoundary") {
+Boundary(system, "SystemBoundary") {
+    System(api_gateway, "API GATEWAY + Balancer")
+    System(auth_service, "KEYCLOACK or etc")
 
-          SystemDb_Ext(SystemE, "Mainframe Banking System", "Stores all of the core banking information about customers, accounts, transactions, etc.")
+    Boundary("graph db", "Seaching user relationship service"){
+        System(graph_db_service, "Service for work with neo4j")
+        SystemDb(graph_db, "Neo4j instance for write")
 
-          System_Boundary(b2, "BankBoundary2") {
-            System(SystemA, "Banking System A")
-            System(SystemB, "Banking System B", "A system of the bank, with personal bank accounts. next line.")
-          }
-
-          System_Ext(SystemC, "E-mail system", "The internal Microsoft Exchange e-mail system.")
-          SystemDb(SystemD, "Banking System D Database", "A system of the bank, with personal bank accounts.")
-
-          Boundary(b3, "BankBoundary3", "boundary") {
-            SystemQueue(SystemF, "Banking System F Queue", "A system of the bank.")
-            SystemQueue_Ext(SystemG, "Banking System G Queue", "A system of the bank, with personal bank accounts.")
-          }
-        }
-      }
-
-      BiRel(customerA, SystemAA, "Uses")
-      BiRel(SystemAA, SystemE, "Uses")
-      Rel(SystemAA, SystemC, "Sends e-mails", "SMTP")
-      Rel(SystemC, customerA, "Sends e-mails to")
-
-      UpdateElementStyle(customerA, $fontColor="red", $bgColor="grey", $borderColor="red")
-      UpdateRelStyle(customerA, SystemAA, $textColor="blue", $lineColor="blue", $offsetX="5")
-      UpdateRelStyle(SystemAA, SystemE, $textColor="blue", $lineColor="blue", $offsetY="-10")
-      UpdateRelStyle(SystemAA, SystemC, $textColor="blue", $lineColor="blue", $offsetY="-40", $offsetX="-50")
-      UpdateRelStyle(SystemC, customerA, $textColor="red", $lineColor="red", $offsetX="-50", $offsetY="20")
-
-      UpdateLayoutConfig($c4ShapeInRow="3", $c4BoundaryInRow="1")
+        BiRel(graph_db_service, graph_db, "crud data")
+    }
+    
 
 
-
+    BiRel(api_gateway, auth_service, "Cheeck auth <br> return token")
+}
 ```
