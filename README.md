@@ -24,36 +24,41 @@ USE merminds as build-in C4-documentation
 
 
 
-The following code-block will be rendered as a Mermaid diagram:
-
 ```mermaid
 C4Context
 
-title Distribution system lern
+title Distribution system learn (C1 Level)
 
-Person_Ext(UnauthPerson, "UnAuthPerson", "Person without auth")
-Person(AuthPerson, "AuthPerson", "Person with auth")
+Person(Admin, "Admin")
+Person_Ext(User, "User")
 
-System_Ext(CDN, "CDN for apps static <br> (s3 backet wih static)")
+BiRel(User, web_client_app, "work in app")
+BiRel(User, mobile_client_app, "work in app")
 
-Rel(UnauthPerson, CDN, "Get app static")
-Rel(AuthPerson, CDN, "Get app static")
-Rel(UnauthPerson, api_gateway, "open app")
-Rel(AuthPerson, api_gateway, "auth")
+BiRel(Admin, admin_client_app, "work in app")
 
-Boundary(system, "SystemBoundary") {
-    System(api_gateway, "API GATEWAY + Balancer")
-    System(auth_service, "KEYCLOACK or etc")
+System_Ext(notification_service, "Notification")
+Rel(notification_service, User, "Send notification <br/> and push")
 
-    Boundary("graph db", "Seaching user relationship service"){
-        System(graph_db_service, "Service for work with neo4j")
-        SystemDb(graph_db, "Neo4j instance for write")
-
-        BiRel(graph_db_service, graph_db, "crud data")
-    }
+Boundary(system, "System") {
+    System(admin_client_app, "ADMIN APP")
+    System(web_client_app, "CLIENT APP")
+    System(mobile_client_app, "CLIENT APP")
     
 
+    SystemDb(database, "Database")
 
-    BiRel(api_gateway, auth_service, "Cheeck auth <br> return token")
+    System(backend, "Backend")
+    
+    BiRel(admin_client_app, backend, "work in app")
+    BiRel(web_client_app, backend, "work in app")
+    BiRel(mobile_client_app, backend, "work in app")
+    
+    Rel(backend, notification_service, "Send notification <br/> and push")
+    BiRel(backend, database, "CRUD")
+
+ UpdateLayoutConfig($systemShapeInRow="3", $systemBoundaryInRow="1")
+ 
+     UpdateRelStyle(backend, notification_service, $textColor="red", $offsetY="-00")
 }
 ```
