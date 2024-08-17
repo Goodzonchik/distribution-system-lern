@@ -1,4 +1,6 @@
-# distribution-system-lern
+# Frankenstein
+
+Frankenstein - repository for studying various technologies, approaches, patterns.
 
 
 docker images
