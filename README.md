@@ -42,7 +42,7 @@ BiRel(Admin, admin_client_app, "work in app")
 System_Ext(notification_service, "Notification")
 Rel(notification_service, User, "Send notification <br/> and push")
 
-Boundary(system, "System") {
+Boundary(system, "Frankenstein") {
     System(admin_client_app, "ADMIN APP")
     System(web_client_app, "CLIENT APP")
     System(mobile_client_app, "CLIENT APP")
