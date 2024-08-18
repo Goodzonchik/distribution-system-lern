@@ -8,10 +8,14 @@ export class UsersService {
   constructor(private readonly neo4jConnectorService: Neo4jConnectorService) {}
 
   async getData() {
-    const { records, summary, keys } = await this.driver.executeQuery(
+    const { records } = await this.driver.executeQuery(
       'MATCH (n:Person) RETURN n LIMIT 25',
     );
 
-    return { records, summary, keys };
+    const res = {
+      records: (records || []).map((item) => item.get('n')),
+    };
+
+    return res;
   }
 }

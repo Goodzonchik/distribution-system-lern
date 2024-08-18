@@ -1,3 +1,18 @@
-<pre>
-  {{ users() | json }}
-</pre>
+<table>
+  <thead>
+    <tr>
+      <th>id</th>
+      <th>name</th>
+      <th>Age</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for(user of users().records; track user.elementId){
+    <tr>
+      <td>{{ user.elementId }}</td>
+      <td>{{ user.properties.name }}</td>
+      <td>{{ user.labels }}</td>
+    </tr>
+    }
+  </tbody>
+</table>
