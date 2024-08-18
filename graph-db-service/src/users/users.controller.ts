@@ -7,7 +7,7 @@ export class UsersController {
   constructor(private readonly UsersService: UsersService) {}
 
   @Get()
-  getData(): Observable<any> {
+  getData(): Observable<any> | Promise<any> {
     return this.UsersService.getData();
   }
 }
