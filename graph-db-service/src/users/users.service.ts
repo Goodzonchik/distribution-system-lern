@@ -1,7 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { Neo4jConnectorService } from '../shared/neo4j-connector.service';
-import { RelationshipDTO } from './users.controller';
-import { cypherPipe, match, returnOp, creatRel } from 'src/shared/utils/neo4j';
+import { NodeDTO, RelationshipDTO } from './users.controller';
+import {
+  cypherPipe,
+  match,
+  returnOp,
+  creatRel,
+  createNode,
+} from 'src/shared/utils/neo4j';
 
 @Injectable()
 export class UsersService {
@@ -41,6 +47,16 @@ export class UsersService {
       match('Person', 'name', relationship.nameFrom, 'f'),
       match('Person', 'name', relationship.nameTo, 't'),
       creatRel('PARENT', 'f', 't'),
+    );
+
+    await this.driver.executeQuery(query);
+
+    return;
+  }
+
+  async createUser(body: NodeDTO) {
+    const query = cypherPipe(
+      createNode('f', body.type, body.propName, body.propValue),
     );
 
     await this.driver.executeQuery(query);

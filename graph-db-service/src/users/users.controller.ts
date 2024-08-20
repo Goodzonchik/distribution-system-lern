@@ -9,25 +9,36 @@ export type RelationshipDTO = {
   relationship: string;
 };
 
+export type NodeDTO = {
+  type: string;
+  propName: string;
+  propValue: string;
+};
+
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
-  constructor(private readonly UsersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) {}
 
   @Get()
   getUsers(): Observable<any> | Promise<any> {
-    return this.UsersService.getUsers();
+    return this.usersService.getUsers();
   }
 
   @Get(':name')
   searchByName(@Param('name') name: string): Observable<any> | Promise<any> {
-    return this.UsersService.searchByName(name);
+    return this.usersService.searchByName(name);
   }
 
   @Post('create-relationship')
   createRelationShip(
     @Body() body: RelationshipDTO,
   ): Observable<any> | Promise<any> {
-    return this.UsersService.createRelationship(body);
+    return this.usersService.createRelationship(body);
+  }
+
+  @Post()
+  createUser(@Body() body: NodeDTO): Observable<any> | Promise<any> {
+    return this.usersService.createUser(body);
   }
 }

@@ -19,4 +19,13 @@ export class UsersApiService {
       }
     );
   }
+
+  createUsers$(type: string, propName: string, propValue: string) {
+    return this.httpClient.post<void>('http://localhost:3000/api/users', {
+      uid: 'u',
+      type,
+      propName,
+      propValue,
+    });
+  }
 }
