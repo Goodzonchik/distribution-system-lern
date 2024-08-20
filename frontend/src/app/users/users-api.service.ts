@@ -8,4 +8,15 @@ export class UsersApiService {
   getUsers$() {
     return this.httpClient.get<any>('http://localhost:3000/api/users');
   }
+
+  setUsersRelationship$(from: string, to: string, relationship: string) {
+    return this.httpClient.post<void>(
+      'http://localhost:3000/api/users/create-relationship',
+      {
+        nameFrom: from,
+        nameTo: to,
+        relationship,
+      }
+    );
+  }
 }
