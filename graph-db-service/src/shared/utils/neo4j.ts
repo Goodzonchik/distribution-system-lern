@@ -32,24 +32,10 @@ export function createNode(
   return `CREATE (${uid}:${type} {${propName}: '${propValue}'})`;
 }
 
+export function deleteNode(uid: string): string {
+  return `DETACH DELETE ${uid}`;
+}
+
 export function cypherPipe(...operators): string {
   return operators.reduce((acc, operator) => acc + operator, '');
 }
-
-/* 
-// Изменение параметров записи
-MATCH (charlie:Person {name: 'Charlie'})
-SET charlie.name = 'Peaty'
-
-// Add label
-MATCH (peaty:Person {name: 'Peaty'})
-SET peaty:Male
-
-// remove label
-MATCH (peaty:Person {name: 'Peaty'})
-REMOVE peaty:Male
-
-// DELETE NODE WITH RELATIONSHIP
-MATCH (node:<TYPE> {name: '<Name>'})
-DETACH DELETE node
-*/

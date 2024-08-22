@@ -20,12 +20,24 @@ export class UsersApiService {
     );
   }
 
-  createUsers$(type: string, propName: string, propValue: string) {
+  createUsers$(
+    type: string,
+    propName: string,
+    propValue: string,
+    label: string
+  ) {
     return this.httpClient.post<void>('http://localhost:3000/api/users', {
       uid: 'u',
       type,
       propName,
       propValue,
+      label,
     });
+  }
+
+  deleteUser$(name: string) {
+    return this.httpClient.delete<void>(
+      `http://localhost:3000/api/users/${name}`
+    );
   }
 }

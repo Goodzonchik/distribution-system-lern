@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { UsersService } from './users.service.js';
 import { Observable } from 'rxjs';
 import { ApiTags } from '@nestjs/swagger';
@@ -13,6 +13,7 @@ export type NodeDTO = {
   type: string;
   propName: string;
   propValue: string;
+  label: string;
 };
 
 @ApiTags('Users')
@@ -40,5 +41,10 @@ export class UsersController {
   @Post()
   createUser(@Body() body: NodeDTO): Observable<any> | Promise<any> {
     return this.usersService.createUser(body);
+  }
+
+  @Delete(':name')
+  deleteUser(@Param('name') name: string): Observable<any> | Promise<any> {
+    return this.usersService.deleteUser(name);
   }
 }

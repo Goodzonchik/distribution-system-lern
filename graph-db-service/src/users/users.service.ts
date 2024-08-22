@@ -7,6 +7,8 @@ import {
   returnOp,
   creatRel,
   createNode,
+  setLabel,
+  deleteNode,
 } from 'src/shared/utils/neo4j';
 
 @Injectable()
@@ -17,7 +19,7 @@ export class UsersService {
 
   async getUsers() {
     const { records } = await this.driver.executeQuery(
-      'MATCH (n:Person) RETURN n LIMIT 25',
+      'MATCH (n) RETURN n LIMIT 25',
     );
 
     const res = {
@@ -57,6 +59,18 @@ export class UsersService {
   async createUser(body: NodeDTO) {
     const query = cypherPipe(
       createNode('f', body.type, body.propName, body.propValue),
+      setLabel('f', body.label),
+    );
+
+    await this.driver.executeQuery(query);
+
+    return;
+  }
+
+  async deleteUser(name: string) {
+    const query = cypherPipe(
+      match('Person', 'name', name, 'f'),
+      deleteNode('f'),
     );
 
     await this.driver.executeQuery(query);

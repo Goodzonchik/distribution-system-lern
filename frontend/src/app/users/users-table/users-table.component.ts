@@ -23,25 +23,53 @@ export class UsersTableComponent {
   users$ = this.loadData$();
 
   name = new FormControl('', Validators.required);
+  label = new FormControl('', Validators.required);
+
+  parent: string | null = null;
+  child: string | null = null;
 
   loadData$() {
     return this.usersApiService.getUsers$();
   }
 
   createRelationShip() {
+    if (!this.parent || !this.child) {
+      alert('Choose parent and child!');
+
+      return;
+    }
+
     this.usersApiService
-      .setUsersRelationship$('Kevin', 'Joli', 'PARENT')
-      .subscribe();
+      .setUsersRelationship$(this.parent, this.child, 'PARENT')
+      .subscribe(() => {
+        this.parent = null;
+        this.child = null;
+      });
+  }
+
+  setParent(user: string) {
+    this.parent = user;
+  }
+
+  setChild(user: string) {
+    this.child = user;
   }
 
   createUser() {
-    if (this.name.value) {
+    if (this.name.value && this.label.value) {
       this.usersApiService
-        .createUsers$('Person', 'name', this.name.value)
+        .createUsers$('Person', 'name', this.name.value, this.label.value)
         .subscribe(() => {
           this.name.reset();
           this.users$ = this.loadData$();
         });
     }
+  }
+
+  deleteUser(user: string) {
+    this.usersApiService.deleteUser$(user).subscribe(() => {
+      this.name.reset();
+      this.users$ = this.loadData$();
+    });
   }
 }
