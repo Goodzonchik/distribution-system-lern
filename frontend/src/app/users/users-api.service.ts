@@ -4,20 +4,18 @@ import { inject, Injectable } from '@angular/core';
 @Injectable()
 export class UsersApiService {
   httpClient = inject(HttpClient);
+  private baseUrl = 'http://localhost:3000/api/users';
 
   getUsers$() {
-    return this.httpClient.get<any>('http://localhost:3000/api/users');
+    return this.httpClient.get<any>(this.baseUrl);
   }
 
   setUsersRelationship$(from: string, to: string, relationship: string) {
-    return this.httpClient.post<void>(
-      'http://localhost:3000/api/users/create-relationship',
-      {
-        nameFrom: from,
-        nameTo: to,
-        relationship,
-      }
-    );
+    return this.httpClient.post<void>(`${this.baseUrl}/create-relationship`, {
+      nameFrom: from,
+      nameTo: to,
+      relationship,
+    });
   }
 
   createUsers$(
@@ -26,7 +24,7 @@ export class UsersApiService {
     propValue: string,
     label: string
   ) {
-    return this.httpClient.post<void>('http://localhost:3000/api/users', {
+    return this.httpClient.post<void>(this.baseUrl, {
       uid: 'u',
       type,
       propName,
@@ -36,8 +34,6 @@ export class UsersApiService {
   }
 
   deleteUser$(name: string) {
-    return this.httpClient.delete<void>(
-      `http://localhost:3000/api/users/${name}`
-    );
+    return this.httpClient.delete<void>(`${this.baseUrl}/${name}`);
   }
 }
