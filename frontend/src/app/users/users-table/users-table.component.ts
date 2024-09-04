@@ -1,14 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { UsersApiService } from '../users-api.service';
-import { toSignal } from '@angular/core/rxjs-interop';
-import {
-  FormControl,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AsyncPipe } from '@angular/common';
-import { FilesApiService } from '../files-api.service';
+import { FilesApiService } from '../../shared/files-api.service';
 
 @Component({
   selector: 'app-users-table',

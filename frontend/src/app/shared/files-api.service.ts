@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { saveAs } from 'file-saver';
 import { Observable, tap } from 'rxjs';
@@ -6,17 +6,15 @@ import { Observable, tap } from 'rxjs';
 @Injectable()
 export class FilesApiService {
   httpClient = inject(HttpClient);
-  private baseUrl = 'http://localhost:3000/api/Buckets/file';
+  private baseUrl = 'http://localhost:3000/api/Buckets';
 
   getFile$(name: string) {
     return this.httpClient
-      .get(`${this.baseUrl}/${name}`, {
+      .get(`${this.baseUrl}/file/${name}`, {
         responseType: 'blob',
       })
       .pipe(
         tap((res) => {
-          console.log('download');
-
           saveAs(res as unknown as Blob, name);
         })
       );
@@ -27,9 +25,6 @@ export class FilesApiService {
     formData.append('file', fileToUpload);
     formData.append('filename', fileToUpload.name);
 
-    return this.httpClient.post(
-      'http://localhost:3000/api/Buckets/upload',
-      formData
-    );
+    return this.httpClient.post(`${this.baseUrl}/upload`, formData);
   }
 }
