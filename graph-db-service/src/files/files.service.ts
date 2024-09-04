@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, StreamableFile } from '@nestjs/common';
 import * as Minio from 'minio';
 
 @Injectable()
@@ -24,19 +24,13 @@ export class FilesService {
     return buckets;
   }
 
-  async getFile(name: string) {
-    let size = 0;
-    const dataStream = await this.minioClient.getObject('frankenstein', name);
+  async getFile(filename: string) {
+    const dataStream = await this.minioClient.getObject(
+      'frankenstein',
+      filename,
+    );
 
-    dataStream.on('data', function (chunk) {
-      size += chunk.length;
-    });
-    dataStream.on('end', function () {
-      console.log('End. Total size = ' + size);
-    });
-    dataStream.on('error', function (err) {
-      console.log(err);
-    });
+    return new StreamableFile(dataStream);
   }
 
   async getObjects(name: string) {
@@ -48,15 +42,17 @@ export class FilesService {
         data.push(obj);
       });
       dataStream.on('end', function (obj) {
-        console.log(data);
         resolve(data);
       });
       dataStream.on('error', function (err) {
-        console.log(err);
         reject(err);
       });
     });
 
     return await promise;
+  }
+
+  async putObject(bucketName, objectName, stream) {
+    await this.minioClient.putObject(bucketName, objectName, stream);
   }
 }

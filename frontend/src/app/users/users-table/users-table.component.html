@@ -34,3 +34,15 @@
 <input type="text" [formControl]="name" />
 <input type="text" [formControl]="label" />
 <button (click)="createUser()">createUser</button>
+<br /><br />
+<br /><br />
+<br /><br />
+<button (click)="downloadFile()">downloadFile</button>
+
+<br /><br />
+<div class="form-group">
+  <label for="file">Choose File</label>
+  <input type="file" id="file" (change)="handleFileInput($event)" />
+
+  <button (click)="uploadFileToActivity()">uploadFileToActivity</button>
+</div>

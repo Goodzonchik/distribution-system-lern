@@ -8,17 +8,19 @@ import {
   Validators,
 } from '@angular/forms';
 import { AsyncPipe } from '@angular/common';
+import { FilesApiService } from '../files-api.service';
 
 @Component({
   selector: 'app-users-table',
   standalone: true,
   templateUrl: './users-table.component.html',
   styleUrl: './users-table.component.scss',
-  providers: [UsersApiService],
+  providers: [UsersApiService, FilesApiService],
   imports: [AsyncPipe, ReactiveFormsModule],
 })
 export class UsersTableComponent {
   private usersApiService = inject(UsersApiService);
+  private filesApiService = inject(FilesApiService);
 
   users$ = this.loadData$();
 
@@ -27,6 +29,8 @@ export class UsersTableComponent {
 
   parent: string | null = null;
   child: string | null = null;
+
+  fileToUpload: File | null = null;
 
   loadData$() {
     return this.usersApiService.getUsers$();
@@ -71,5 +75,26 @@ export class UsersTableComponent {
       this.name.reset();
       this.users$ = this.loadData$();
     });
+  }
+
+  downloadFile() {
+    this.filesApiService.getFile$('tabaxi.jpg').subscribe(() => {});
+  }
+
+  handleFileInput(event: Event | null) {
+    const files = (event as any)?.target?.files;
+    if (!files) {
+      return;
+    }
+
+    this.fileToUpload = files.item(0);
+  }
+
+  uploadFileToActivity() {
+    if (!this.fileToUpload) {
+      return;
+    }
+
+    this.filesApiService.postFile(this.fileToUpload).subscribe();
   }
 }
