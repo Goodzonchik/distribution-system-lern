@@ -1,0 +1,32 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th>name</th>
+      <th>lastModified</th>
+      <th>size</th>
+      <th>#</th>
+    </tr>
+  </thead>
+  <tbody>
+    @if(files$ |async; as files) { @for(file of files; track file) {
+    <tr>
+      <td>{{ file.name }}</td>
+      <td>{{ file.lastModified | date }}</td>
+      <td>{{ file.size }}</td>
+      <td></td>
+    </tr>
+    } }
+  </tbody>
+</table>
+
+<br /><br />
+
+<button (click)="downloadFile()">downloadFile</button>
+
+<br /><br />
+<div class="form-group">
+  <label for="file">Choose File</label>
+  <input type="file" id="file" (change)="handleFileInput($event)" />
+
+  <button (click)="uploadFileToActivity()">uploadFileToActivity</button>
+</div>

@@ -6,4 +6,9 @@ export const routes: Routes = [
     loadChildren: () =>
       import('./users/users.routes').then((m) => m.userRoutes),
   },
+  {
+    path: 'files',
+    loadChildren: () =>
+      import('./files/files.routes').then((m) => m.filesRoutes),
+  },
 ];
