@@ -9,8 +9,9 @@ import {
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { FileDto, FilesApiService } from '../files-api.service';
-import { filter, take } from 'rxjs';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { take } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-files-table',
@@ -23,6 +24,7 @@ import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 export class FilesTableComponent {
   private readonly filesApiService = inject(FilesApiService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly router = inject(Router);
 
   files = signal<FileDto[]>([]);
 
@@ -30,7 +32,7 @@ export class FilesTableComponent {
 
   fileToUpload: File | null = null;
 
-  bucket = input<string>();
+  bucket = input.required<string>();
 
   constructor() {
     effect(() => {
@@ -46,13 +48,17 @@ export class FilesTableComponent {
   }
 
   downloadFile(fileName: string) {
-    this.filesApiService.downloadFile$(this.bucket()!, fileName).subscribe();
+    this.filesApiService.downloadFile$(this.bucket(), fileName).subscribe();
   }
 
   deleteFile(fileName: string) {
-    this.filesApiService.deleteFile$(this.bucket()!, fileName).subscribe(() => {
+    this.filesApiService.deleteFile$(this.bucket(), fileName).subscribe(() => {
       this.getFilesData(this.bucket()!);
     });
+  }
+
+  goBack() {
+    this.router.navigate(['bucket']);
   }
 
   handleFileInput(event: Event | null) {
@@ -70,7 +76,7 @@ export class FilesTableComponent {
     }
 
     this.filesApiService
-      .uploadFile$(this.bucket()!, this.fileToUpload)
+      .uploadFile$(this.bucket(), this.fileToUpload)
       .subscribe();
   }
 
