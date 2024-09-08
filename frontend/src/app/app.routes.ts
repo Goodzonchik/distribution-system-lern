@@ -7,7 +7,7 @@ export const routes: Routes = [
       import('./users/users.routes').then((m) => m.userRoutes),
   },
   {
-    path: 'files',
+    path: 'bucket',
     loadChildren: () =>
       import('./files/files.routes').then((m) => m.filesRoutes),
   },

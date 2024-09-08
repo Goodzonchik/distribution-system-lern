@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -20,39 +21,65 @@ export class StorageObjectDto {
   file: Express.Multer.File;
 }
 
-@ApiTags('Files')
-@Controller('Buckets')
+@ApiTags('File')
+@Controller('bucket')
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
-  @Get('buckets')
+  @Get()
+  @ApiProperty({
+    description: 'Endpoint for get bucket list',
+  })
   getBuckets() {
     return this.filesService.getBuckets();
   }
 
-  @Get('objects/:bucket')
+  @Get(':bucket')
+  @ApiProperty({
+    description: 'Endpoint for get file list in bucket',
+  })
   getObjets(@Param('bucket') bucket: string) {
     return this.filesService.getObjects(bucket);
   }
 
-  @Get('file/:filename')
-  getFile(@Param('filename') filename: string) {
-    return this.filesService.getFile(filename);
+  @Get(':bucket/file/:filename')
+  @ApiProperty({
+    description: 'Endpoint for download file from bucket',
+  })
+  getFile(
+    @Param('bucket') bucket: string,
+    @Param('filename') filename: string,
+  ) {
+    return this.filesService.getFile(bucket, filename);
   }
 
-  @Post('upload')
+  @Post(':bucket/file')
+  @ApiProperty({
+    description: 'Endpoint for upload file to bucket',
+  })
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file'))
   uploadFile(
+    @Param('bucket') bucket: string,
     @Body() data: StorageObjectDto,
-
     @UploadedFile() file: Express.Multer.File,
   ): Promise<string> {
     const fileName =
       v4() + '.' + (data.filename || file.originalname).split('.').pop();
 
     return this.filesService
-      .putObject('frankenstein', fileName, file.buffer)
+      .putObject(bucket, fileName, file.buffer)
       .then(() => fileName);
+  }
+
+  @Delete(':bucket/file/:filename')
+  @ApiProperty({
+    description: 'Endpoint for download file from bucket',
+  })
+  deleteFile(
+    @Param('bucket') bucket: string,
+    @Param('filename') filename: string,
+  ) {
+    return this.filesService.removeObject(bucket, filename);
   }
 }

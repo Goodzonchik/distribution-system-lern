@@ -16,19 +16,13 @@ export class FilesService {
 
     try {
       buckets = await this.minioClient.listBuckets();
-      console.log('Success', buckets);
-    } catch (err) {
-      console.log(err.message);
-    }
+    } catch (err) {}
 
     return buckets;
   }
 
-  async getFile(filename: string) {
-    const dataStream = await this.minioClient.getObject(
-      'frankenstein',
-      filename,
-    );
+  async getFile(bucket: string, filename: string) {
+    const dataStream = await this.minioClient.getObject(bucket, filename);
 
     return new StreamableFile(dataStream);
   }
@@ -52,7 +46,11 @@ export class FilesService {
     return await promise;
   }
 
-  async putObject(bucketName, objectName, stream) {
+  async putObject(bucketName: string, objectName: string, stream) {
     await this.minioClient.putObject(bucketName, objectName, stream);
+  }
+
+  async removeObject(bucketName: string, objectName: string) {
+    await this.minioClient.removeObject(bucketName, objectName);
   }
 }

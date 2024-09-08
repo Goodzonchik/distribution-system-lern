@@ -1,3 +1,5 @@
+<h3>Files from {{ bucket() }}</h3>
+
 <table class="table">
   <thead>
     <tr>
@@ -8,20 +10,19 @@
     </tr>
   </thead>
   <tbody>
-    @if(files$ |async; as files) { @for(file of files; track file) {
+    @for(file of files(); track file) {
     <tr>
       <td>{{ file.name }}</td>
       <td>{{ file.lastModified | date }}</td>
       <td>{{ file.size }}</td>
-      <td></td>
+      <td>
+        <button (click)="downloadFile(file.name)">download</button>
+        <button (click)="deleteFile(file.name)">delete</button>
+      </td>
     </tr>
-    } }
+    }
   </tbody>
 </table>
-
-<br /><br />
-
-<button (click)="downloadFile()">downloadFile</button>
 
 <br /><br />
 <div class="form-group">
