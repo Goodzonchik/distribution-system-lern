@@ -5,19 +5,27 @@ C4Context
 
 title Frankenstein level2 (C2 Level)
 
+System(web_client_app, "CLIENT APP", "Angular")
+
 Boundary(system, "Frankenstein") {
-    System(web_client_app, "CLIENT APP", "Angular")
+    System(reverse_proxy, "Reverse proxy", "Nginx")
+    BiRel(web_client_app, reverse_proxy, , "...")
+    BiRel(reverse_proxy, graph_db_backend, , "...")
+    BiRel(reverse_proxy, file_storage_backend, , "...")
 
-    System(graph_db_backend, "Graph database service", "NestJs")
-    System(file_storage_backend, "File storage service", "NestJs")
+    Boundary(file_storage, "File storage") {
+        System(file_storage_backend, "File storage service", "NestJs")
+        SystemDb(file_storage, "File Storage", "Minio (S3)")
+        BiRel(file_storage_backend, file_storage, , "...")
 
-    SystemDb(graph_database, "Graph Database", "Neo4j")
-    SystemDb(file_storage, "File Storage", "Minio (S3)")
+    }
 
-    BiRel(web_client_app, graph_db_backend, , "...")
-    BiRel(web_client_app, file_storage_backend, , "...")
-
-    BiRel(graph_db_backend, graph_database, , "...")
-    BiRel(file_storage_backend, file_storage, , "...")
+     Boundary(graph_storage, "Graph storage") {
+        System(graph_db_backend, "Graph database service", "NestJs")
+        SystemDb(graph_database, "Graph Database", "Neo4j")
+        BiRel(graph_db_backend, graph_database, , "...")
+    }
 }
+
+UpdateLayoutConfig($c4ShapeInRow="1", $c4BoundaryInRow="2")
 ```
