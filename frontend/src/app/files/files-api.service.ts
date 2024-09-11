@@ -13,7 +13,8 @@ export type FileDto = {
 @Injectable()
 export class FilesApiService {
   httpClient = inject(HttpClient);
-  private baseUrl = 'http://localhost:3001/api/bucket';
+
+  private baseUrl = 'http://localhost:8080/api/bucket';
 
   getBuckets$(): Observable<any[]> {
     return this.httpClient.get<any[]>(this.baseUrl);

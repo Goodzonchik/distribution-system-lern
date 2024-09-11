@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import * as neo4j from 'neo4j-driver';
 
 const connectionConfig = {
-  uri: 'neo4j://localhost',
+  uri: 'neo4j://172.18.0.3',
 };
 
 @Injectable()

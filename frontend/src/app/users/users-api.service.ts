@@ -4,7 +4,7 @@ import { inject, Injectable } from '@angular/core';
 @Injectable()
 export class UsersApiService {
   httpClient = inject(HttpClient);
-  private baseUrl = 'http://localhost:3000/api/users';
+  private baseUrl = 'http://localhost:8080/api/users';
 
   getUsers$() {
     return this.httpClient.get<any>(this.baseUrl);

@@ -4,7 +4,7 @@ import * as Minio from 'minio';
 @Injectable()
 export class FilesService {
   private minioClient = new Minio.Client({
-    endPoint: 'localhost',
+    endPoint: '172.18.0.2',
     port: 9000,
     useSSL: false,
     accessKey: 'minioadmin',
