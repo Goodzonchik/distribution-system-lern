@@ -16,8 +16,8 @@ export type NodeDTO = {
   label: string;
 };
 
-@ApiTags('Users')
-@Controller('users')
+@ApiTags('User')
+@Controller('user')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -27,15 +27,8 @@ export class UsersController {
   }
 
   @Get(':name')
-  searchByName(@Param('name') name: string): Observable<any> | Promise<any> {
+  getUserByName(@Param('name') name: string): Observable<any> | Promise<any> {
     return this.usersService.searchByName(name);
-  }
-
-  @Post('create-relationship')
-  createRelationShip(
-    @Body() body: RelationshipDTO,
-  ): Observable<any> | Promise<any> {
-    return this.usersService.createRelationship(body);
   }
 
   @Post()
@@ -46,5 +39,12 @@ export class UsersController {
   @Delete(':name')
   deleteUser(@Param('name') name: string): Observable<any> | Promise<any> {
     return this.usersService.deleteUser(name);
+  }
+
+  @Post('relationship')
+  createRelationShip(
+    @Body() body: RelationshipDTO,
+  ): Observable<any> | Promise<any> {
+    return this.usersService.createRelationship(body);
   }
 }

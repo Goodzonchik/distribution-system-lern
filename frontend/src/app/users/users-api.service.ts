@@ -4,14 +4,14 @@ import { inject, Injectable } from '@angular/core';
 @Injectable()
 export class UsersApiService {
   httpClient = inject(HttpClient);
-  private baseUrl = 'http://localhost:8080/api/users';
+  private baseUrl = 'http://localhost:8080/api/user';
 
   getUsers$() {
     return this.httpClient.get<any>(this.baseUrl);
   }
 
   setUsersRelationship$(from: string, to: string, relationship: string) {
-    return this.httpClient.post<void>(`${this.baseUrl}/create-relationship`, {
+    return this.httpClient.post<void>(`${this.baseUrl}/relationship`, {
       nameFrom: from,
       nameTo: to,
       relationship,
