@@ -29,8 +29,8 @@ Boundary(system, "Frankenstein") {
     }
 
     Boundary(sql_storage, "SQL storage") {
-        System(sql_db_backend, "SQL database service", "PostgreSQL")
-        SystemDb(sql, "SQL Database", "Neo4j")
+        System(sql_db_backend, "SQL database service", "NestJs")
+        SystemDb(sql, "SQL Database", "PostgreSQL")
         BiRel(sql_db_backend, sql, , "...")
     }
 }
