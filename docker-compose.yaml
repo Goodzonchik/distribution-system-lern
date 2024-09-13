@@ -63,6 +63,39 @@ services:
       default:
         ipv4_address: 172.18.0.6
 
+  postgres:
+    image: postgres
+    container_name: postgres-db
+    restart: always
+    environment:
+      POSTGRES_DB: frankenstein
+      POSTGRES_USER: victor
+      POSTGRES_PASSWORD: victor
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./postgresql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      default:
+        ipv4_address: 172.18.0.7
+
+  postgres-adminer:
+    image: adminer
+    container_name: postgres-adminer
+    restart: always
+    ports:
+      - "8282:8282"
+    command:
+      - "php"
+      - "-S"
+      - "[::]:8282"
+      - "-t"
+      - "/var/www/html"
+    networks:
+      default:
+        ipv4_address: 172.18.0.8
+
 volumes:
   minio-storage:
   neo4jdata:
+  pgdata:
+#need rename files from users to user and check method
