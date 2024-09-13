@@ -36,6 +36,13 @@ services:
     networks:
       default:
         ipv4_address: 172.18.0.4
+    depends_on:
+      graph-db-service:
+        condition: service_started
+      postgres-db-service:
+        condition: service_started
+      file-storage:
+        condition: service_started
 
   file-storage:
     image: node:18
@@ -49,6 +56,9 @@ services:
     networks:
       default:
         ipv4_address: 172.18.0.5
+    depends_on:
+      minio:
+        condition: service_started
 
   graph-db-service:
     image: node:18
@@ -62,6 +72,9 @@ services:
     networks:
       default:
         ipv4_address: 172.18.0.6
+    depends_on:
+      neo4j:
+        condition: service_started
 
   postgres:
     image: postgres
@@ -93,6 +106,27 @@ services:
     networks:
       default:
         ipv4_address: 172.18.0.8
+    depends_on:
+      postgres:
+        condition: service_started
+
+  postgres-db-service:
+    image: node:18
+    container_name: postgres-db-service
+    volumes:
+      - ./postgres-db-service/:/app
+    #working_dir: /app/dist
+    working_dir: /app
+    #command: node main.js
+    command: npm run start:dev
+    expose:
+      - "3000"
+    networks:
+      default:
+        ipv4_address: 172.18.0.9
+    depends_on:
+      postgres:
+        condition: service_started
 
 volumes:
   minio-storage:
