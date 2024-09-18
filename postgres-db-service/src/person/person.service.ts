@@ -6,16 +6,16 @@ import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Person {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   person_id: string;
 
-  @Column({ nullable: false, default: '' })
+  @Column({ nullable: false })
   name: string;
 
-  @Column({ nullable: false, default: '' })
+  @Column({ nullable: false })
   last_name: string;
 
-  @Column({ nullable: false, default: '2000-01-01' })
+  @Column({ nullable: false })
   birth_date: string;
 }
 
