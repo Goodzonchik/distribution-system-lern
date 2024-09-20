@@ -37,4 +37,9 @@ export class PersonService {
   async remove(id: string): Promise<void> {
     await this.usersRepository.delete(id);
   }
+
+  async create(person: Person): Promise<Person> {
+    console.log('create', JSON.stringify(person));
+    return this.usersRepository.save(person);
+  }
 }
