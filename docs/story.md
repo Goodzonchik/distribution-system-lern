@@ -31,6 +31,7 @@ sequenceDiagram
     BusQueue-->>GraphDbService: set data to sync with graph db;
 
     ReverseProxy->>ClientApp: new user with uuid;
+    ClientApp->>User: redirect to user profile and load user profile
 ```
 
 ## Поиск пользователей [WIP]
